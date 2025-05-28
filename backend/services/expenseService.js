@@ -6,7 +6,7 @@ const createExpense = async (data) => {
 };
 
 const getAllExpenses = async () => {
-  return await Expense.findAll({ include: User });
+  return await Expense.findAll(); //{ include: User }
 };
 
 const getTotalExpensesByUser = async () => {

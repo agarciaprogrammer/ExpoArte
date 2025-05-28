@@ -12,10 +12,12 @@ const createExpense = async (req, res) => {
 
 const getAllExpenses = async (req, res) => {
   try {
+    console.log("Obteniendo gastos...");
     const expenses = await expenseService.getAllExpenses();
     res.json(expenses);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Error al obtener gastos:", error);
+    res.status(500).json({ error: "Error al obtener gastos" });
   }
 };
 

@@ -25,6 +25,7 @@ export default function Gastos() {
 
   const fetchExpenses = async () => {
     const data = await getExpenses();
+    console.log("Datos de gastos recibidos:", data);
     setExpenses(data);
   }
 
@@ -37,8 +38,6 @@ export default function Gastos() {
   setForm({ ...form, [name]: value });
   };
 
-
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await createExpense(form);
@@ -50,11 +49,10 @@ export default function Gastos() {
   const totalGeneral = expenses.reduce((acc, exp) => acc + Number(exp.amount), 0);
 
   const totalesPorOrganizadora: { [key: string]: number } = expenses.reduce((acc, exp) => {
-  if (!acc[exp.organizer]) acc[exp.organizer] = 0;
-  acc[exp.organizer] += exp.amount;
-  return acc;
-  }, {} as { [key: string]: number });
-
+    if (!acc[exp.organizer]) acc[exp.organizer] = 0;
+    acc[exp.organizer] += Number(exp.amount);
+    return acc;
+  }, {});
 
   return (
     <>
@@ -87,10 +85,10 @@ export default function Gastos() {
 
       <Modal isOpen={showForm} onClose={() => setShowForm(false)} title="Agregar Gasto">
         <form onSubmit={handleSubmit}>
-          <FormField label="Descripción" name="descripcion" type="text" value={form.description} onChange={handleChange} />
-          <FormField label="Monto" name="monto" type="number" value={form.amount} onChange={handleChange} />
-          <FormField label="Fecha" name="fecha" type="date" value={form.date} onChange={handleChange} />
-          <FormField label="Organizadora" name="organizadora" type="text" value={form.organizer} onChange={handleChange} />
+          <FormField label="Descripción" name="description" type="text" value={form.description} onChange={handleChange} />
+          <FormField label="Monto" name="amount" type="number" value={form.amount} onChange={handleChange} />
+          <FormField label="Fecha" name="date" type="date" value={form.date} onChange={handleChange} />
+          <FormField label="Organizadora" name="organizer" type="text" value={form.organizer} onChange={handleChange} />
           <button type="submit" className={globalStyles.button}>Guardar</button>
         </form>
       </Modal>
