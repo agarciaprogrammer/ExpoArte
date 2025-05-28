@@ -1,14 +1,7 @@
 import axios from 'axios';
+import type { Expense } from '../types'; // ← tipo importado
 
-const API_URL = 'http://localhost:3001/api/expenses'; // Ajustalo según tu backend
-
-export interface Expense {
-  id: string;
-  description: string;
-  amount: number;
-  date: string;
-  organizer: string;
-}
+const API_URL = 'http://localhost:3001/api/expenses';
 
 export async function getExpenses(): Promise<Expense[]> {
   const response = await axios.get<Expense[]>(API_URL);

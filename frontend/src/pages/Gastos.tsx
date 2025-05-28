@@ -1,19 +1,21 @@
 import globalStyles from './styles/Global.module.css';
 import Navbar from '../components/Navbar';
-import { useState, useEffect } from 'react';
 import Table from '../components/Table';
 import FormField from '../components/FormField';
 import Modal from '../components/Modal';
+import { useState, useEffect } from 'react';
+import type { Expense } from '../types';
 import { getExpenses, createExpense } from '../services/expenseService.ts';
+
 
 export default function Gastos() {
   const [showForm, setShowForm] = useState(false);
-  const [expenses, setExpenses] = useState([]);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
   const [form, setForm] = useState({
-    descripcion: '',
-    monto: '',
-    fecha: '',
-    organizadora: '',
+    description: '',
+    amount: 0,
+    date: '',
+    organizer: '',
   });
 
   useEffect(() => {
@@ -30,25 +32,29 @@ export default function Gastos() {
     setShowForm(true);
   };
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const { name, value } = e.target;
+  setForm({ ...form, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await createExpense(form);
     fetchExpenses();
     setShowForm(false);
-    setForm({ descripcion: '', monto: '', fecha: '', organizadora: '' });
+    setForm({ description: '', amount: 0, date: '', organizer: '' });
   };
 
-  const totalGeneral = expenses.reduce((acc, exp) => acc + Number(exp.monto), 0);
+  const totalGeneral = expenses.reduce((acc, exp) => acc + Number(exp.amount), 0);
 
-  const totalesPorOrganizadora = expenses.reduce((acc, exp) => {
-    if (!acc[exp.organizadora]) acc[exp.organizadora] = 0;
-    acc[exp.organizadora] += Number(exp.monto);
-    return acc;
-  }, {});
+  const totalesPorOrganizadora: { [key: string]: number } = expenses.reduce((acc, exp) => {
+  if (!acc[exp.organizer]) acc[exp.organizer] = 0;
+  acc[exp.organizer] += exp.amount;
+  return acc;
+  }, {} as { [key: string]: number });
+
 
   return (
     <>
@@ -71,24 +77,23 @@ export default function Gastos() {
         <Table
           headers={['Descripción', 'Monto', 'Fecha', 'Organizadora']}
           rows={expenses.map(exp => [
-            exp.descripcion,
-            `$${Number(exp.monto).toFixed(2)}`,
-            exp.fecha,
-            exp.organizadora
+            exp.description,
+            `$${Number(exp.amount).toFixed(2)}`,
+            exp.date,
+            exp.organizer
           ])}
         />
       </div>
 
-      <Modal show={showForm} onClose={() => setShowForm(false)} title="Agregar Gasto">
+      <Modal isOpen={showForm} onClose={() => setShowForm(false)} title="Agregar Gasto">
         <form onSubmit={handleSubmit}>
-          <FormField label="Descripción" name="descripcion" value={form.descripcion} onChange={handleChange} />
-          <FormField label="Monto" name="monto" type="number" value={form.monto} onChange={handleChange} />
-          <FormField label="Fecha" name="fecha" type="date" value={form.fecha} onChange={handleChange} />
-          <FormField label="Organizadora" name="organizadora" value={form.organizadora} onChange={handleChange} />
+          <FormField label="Descripción" name="descripcion" type="text" value={form.description} onChange={handleChange} />
+          <FormField label="Monto" name="monto" type="number" value={form.amount} onChange={handleChange} />
+          <FormField label="Fecha" name="fecha" type="date" value={form.date} onChange={handleChange} />
+          <FormField label="Organizadora" name="organizadora" type="text" value={form.organizer} onChange={handleChange} />
           <button type="submit" className={globalStyles.button}>Guardar</button>
         </form>
       </Modal>
     </>
   );
-
 }

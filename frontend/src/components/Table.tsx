@@ -1,11 +1,13 @@
 import styles from './Table.module.css';
 
-interface TableProps {
+export interface TableProps {
   headers: string[];
-  data: any[][];
+  rows: (string | number)[][];
 }
 
-export default function Table({ headers, data }: TableProps) {
+export default function Table({ headers, rows }: TableProps) {
+  if (!rows) return null; // O algún spinner de carga
+
   return (
     <table className={styles.table}>
       <thead>
@@ -16,7 +18,7 @@ export default function Table({ headers, data }: TableProps) {
         </tr>
       </thead>
       <tbody>
-        {data.map((row, i) => (
+        {rows.map((row, i) => (
           <tr key={i}>
             {row.map((cell, j) => (
               <td key={j}>{cell}</td>

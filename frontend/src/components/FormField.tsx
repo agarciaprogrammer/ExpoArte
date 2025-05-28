@@ -1,9 +1,9 @@
 import styles from './FormField.module.css';
 
-interface FormFieldProps {
+export interface FormFieldProps {
   label: string;
-  type: string;
   name: string;
+  type: string; // obligatorio
   value: string | number;
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   options?: string[];
