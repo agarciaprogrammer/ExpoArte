@@ -1,9 +1,9 @@
 // src/routes/income.routes.js
 const express = require('express');
 const router = express.Router();
-const incomeController = require('../controllers/income.controller');
-const authMiddleware = require('../middlewares/auth.middleware');
-const roleMiddleware = require('../middlewares/role.middleware');
+const incomeController = require('../controllers/incomeController');
+const authMiddleware = require('../middleware/auth.middleware');
+const roleMiddleware = require('../middleware/role.middleware');
 
 router.use(authMiddleware);
 

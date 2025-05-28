@@ -1,13 +1,14 @@
 // src/routes/expense.routes.js
 const express = require('express');
 const router = express.Router();
-const expenseController = require('../controllers/expense.controller');
-const authMiddleware = require('../middlewares/auth.middleware');
-const roleMiddleware = require('../middlewares/role.middleware');
+const expenseController = require('../controllers/expenseController');
+const authMiddleware = require('../middleware/auth.middleware');
+const roleMiddleware = require('../middleware/role.middleware');
 
 router.use(authMiddleware);
 
-router.get('/', expenseController.getAll);
-router.post('/', roleMiddleware(['admin']), expenseController.create);
+router.get('/', expenseController.getAllExpenses);
+router.post('/', roleMiddleware(['admin']), expenseController.createExpense);
+router.get('/', roleMiddleware(['admin']), expenseController.getTotalExpensesByUser);
 
 module.exports = router;

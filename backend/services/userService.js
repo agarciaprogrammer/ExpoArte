@@ -13,8 +13,13 @@ const getUserById = async (id) => {
   return await User.findByPk(id);
 };
 
+const getUserByEmail = async (email) => {
+  return await User.findOne({ where: { email } });
+};
+
 module.exports = {
   createUser,
   getAllUsers,
-  getUserById
+  getUserById,
+  getUserByEmail
 };

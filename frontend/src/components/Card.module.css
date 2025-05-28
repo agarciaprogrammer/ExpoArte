@@ -1,0 +1,24 @@
+.card {
+  border: 1px solid #e5e5ea;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #fafafa;
+  text-align: center;
+  transition: box-shadow 0.2s;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cardTitle {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #1c1c1e;
+}
+
+.cardValue {
+  font-size: 1.5rem;
+  color: #0071e3;
+  font-weight: 700;
+}

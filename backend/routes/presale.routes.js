@@ -1,9 +1,9 @@
 // src/routes/presale.routes.js
 const express = require('express');
 const router = express.Router();
-const presaleController = require('../controllers/presale.controller');
-const authMiddleware = require('../middlewares/auth.middleware');
-const roleMiddleware = require('../middlewares/role.middleware');
+const presaleController = require('../controllers/preorderController');
+const authMiddleware = require('../middleware/auth.middleware.js');
+const roleMiddleware = require('../middleware/role.middleware.js');
 
 router.use(authMiddleware);
 

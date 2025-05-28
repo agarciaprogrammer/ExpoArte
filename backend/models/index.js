@@ -1,13 +1,22 @@
 // models/index.js
-const Sequelize = require('sequelize');
-const sequelize = require('../config/db');
+import SequelizePkg from 'sequelize';
+import sequelize from '../config/db.js';
 
-const User = require('./User')(sequelize, Sequelize.DataTypes);
-const Expense = require('./Expense')(sequelize, Sequelize.DataTypes);
-const Preorder = require('./Preorder')(sequelize, Sequelize.DataTypes);
-const DoorSale = require('./DoorSale')(sequelize, Sequelize.DataTypes);
-const Attendance = require('./Attendance')(sequelize, Sequelize.DataTypes);
-const Setting = require('./Setting')(sequelize, Sequelize.DataTypes);
+import UserModel from './User.js';
+import ExpenseModel from './Expense.js';
+import PreorderModel from './Preorder.js';
+import DoorSaleModel from './DoorSale.js';
+import AttendanceModel from './Attendance.js';
+import SettingModel from './Setting.js';
+
+const { Sequelize } = SequelizePkg;
+
+const User = UserModel(sequelize, Sequelize.DataTypes);
+const Expense = ExpenseModel(sequelize, Sequelize.DataTypes);
+const Preorder = PreorderModel(sequelize, Sequelize.DataTypes);
+const DoorSale = DoorSaleModel(sequelize, Sequelize.DataTypes);
+const Attendance = AttendanceModel(sequelize, Sequelize.DataTypes);
+const Setting = SettingModel(sequelize, Sequelize.DataTypes);
 
 // Asociaciones
 User.associate({ Expense, Preorder, DoorSale, Attendance });
@@ -28,7 +37,7 @@ Attendance.associate = function(models) {
   Attendance.belongsTo(models.User, { foreignKey: 'userId' });
 };
 
-module.exports = {
+export {
   sequelize,
   Sequelize,
   User,

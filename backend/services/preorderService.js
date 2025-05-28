@@ -5,8 +5,15 @@ const createPreorder = async (data) => {
   return await Preorder.create(data);
 };
 
-const getAllPreorders = async () => {
-  return await Preorder.findAll({ include: [User, Attendance] });
+const getAllPreorders = async (page = 1, pageSize = 10, filters = {}) => {
+  const offset = (page - 1) * pageSize;
+  
+  return await Preorder.findAndCountAll({
+    where: filters,
+    limit: pageSize,
+    offset: offset,
+    include: [User, Attendance]
+  });
 };
 
 const updateCheckedInCount = async (preorderId, newCount) => {
