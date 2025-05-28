@@ -1,5 +1,4 @@
 import styles from './FormField.module.css';
-
 export interface FormFieldProps {
   label: string;
   name: string;
@@ -12,16 +11,31 @@ export interface FormFieldProps {
 export default function FormField({ label, type, name, value, onChange, options }: FormFieldProps) {
   return (
     <div className={styles.field}>
-      <label htmlFor={name}>{label}</label>
+      <label htmlFor={name} className={styles.label}>{label}</label>
       {type === 'select' && options ? (
-        <select name={name} value={value} onChange={onChange}>
+        <select
+          id={name}
+          name={name}
+          value={value}
+          onChange={onChange}
+          className={styles.select}
+          required
+        >
           <option value="">Seleccionar</option>
           {options.map((opt) => (
             <option key={opt} value={opt}>{opt}</option>
           ))}
         </select>
       ) : (
-        <input type={type} name={name} value={value} onChange={onChange} />
+        <input
+          id={name}
+          type={type}
+          name={name}
+          value={value}
+          onChange={onChange}
+          className={styles.input}
+          required
+        />
       )}
     </div>
   );

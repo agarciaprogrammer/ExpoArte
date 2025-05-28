@@ -3,8 +3,8 @@ import Navbar from '../components/Navbar';
 import Table from '../components/Table';
 import FormField from '../components/FormField';
 import Modal from '../components/Modal';
-import { useState, useEffect } from 'react';
 import type { Expense } from '../types';
+import { useState, useEffect } from 'react';
 import { getExpenses, createExpense } from '../services/expenseService.ts';
 
 
@@ -21,7 +21,6 @@ export default function Gastos() {
   useEffect(() => {
     fetchExpenses();
   }, []);
-
 
   const fetchExpenses = async () => {
     const data = await getExpenses();
@@ -48,18 +47,20 @@ export default function Gastos() {
 
   const totalGeneral = expenses.reduce((acc, exp) => acc + Number(exp.amount), 0);
 
-  const totalesPorOrganizadora: { [key: string]: number } = expenses.reduce((acc, exp) => {
+  const totalesPorOrganizadora: { [key: string]: number } = expenses.reduce(
+  (acc: { [key: string]: number }, exp) => {
     if (!acc[exp.organizer]) acc[exp.organizer] = 0;
     acc[exp.organizer] += Number(exp.amount);
     return acc;
-  }, {});
+  },
+  {}
+);
 
   return (
     <>
       <Navbar />
       <div className={globalStyles.container}>
         <h2 className={globalStyles.title}>Gestión de Gastos</h2>
-
         <button className={globalStyles.button} onClick={handleAddExpense}>
           Agregar Gasto
         </button>
@@ -88,7 +89,14 @@ export default function Gastos() {
           <FormField label="Descripción" name="description" type="text" value={form.description} onChange={handleChange} />
           <FormField label="Monto" name="amount" type="number" value={form.amount} onChange={handleChange} />
           <FormField label="Fecha" name="date" type="date" value={form.date} onChange={handleChange} />
-          <FormField label="Organizadora" name="organizer" type="text" value={form.organizer} onChange={handleChange} />
+          <FormField
+            label="Organizadora"
+            name="organizer"
+            type="select"
+            value={form.organizer}
+            onChange={handleChange}
+            options={['Iara', 'Kate']}
+          />
           <button type="submit" className={globalStyles.button}>Guardar</button>
         </form>
       </Modal>
