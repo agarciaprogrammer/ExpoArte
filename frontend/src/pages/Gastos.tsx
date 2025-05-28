@@ -5,12 +5,13 @@ import FormField from '../components/FormField';
 import Modal from '../components/Modal';
 import type { Expense } from '../types';
 import { useState, useEffect } from 'react';
-import { getExpenses, createExpense } from '../services/expenseService.ts';
+import { getExpenses, createExpense, deleteExpense, updateExpense } from '../services/expenseService.ts';
 
 
 export default function Gastos() {
   const [showForm, setShowForm] = useState(false);
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState({
     description: '',
     amount: 0,
@@ -39,10 +40,35 @@ export default function Gastos() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await createExpense(form);
+
+    if (editingId) {
+      await updateExpense(editingId, form);
+    } else {
+      await createExpense(form);
+    }
     fetchExpenses();
     setShowForm(false);
+    setEditingId(null);
     setForm({ description: '', amount: 0, date: '', organizer: '' });
+  };
+
+  const handleRowClick = (expense: Expense) => {
+    setForm({
+      description: expense.description,
+      amount: Number(expense.amount),
+      date: expense.date,
+      organizer: expense.organizer,
+    });
+    setEditingId(expense.id);
+    setShowForm(true); 
+  }
+
+  const handleDelete = async (id: number ) => {
+    const confirmDelete = window.confirm("Estas segura de eliminar este gasto?");
+    if(!confirmDelete) return;
+
+    await deleteExpense(id);
+    fetchExpenses();
   };
 
   const totalGeneral = expenses.reduce((acc, exp) => acc + Number(exp.amount), 0);
@@ -74,13 +100,18 @@ export default function Gastos() {
         ))}
 
         <Table
-          headers={['Descripción', 'Monto', 'Fecha', 'Organizadora']}
+          headers={['Descripción', 'Monto', 'Fecha', 'Organizadora', '']}
           rows={expenses.map(exp => [
             exp.description,
             `$${Number(exp.amount).toFixed(2)}`,
             exp.date,
-            exp.organizer
+            exp.organizer,
+            <button className={globalStyles.buttonDelete} onClick={(e) => {
+              e.stopPropagation();
+              handleDelete(exp.id);
+            }}>Eliminar</button>
           ])}
+          onRowClick={(index) => handleRowClick(expenses[index])}
         />
       </div>
 

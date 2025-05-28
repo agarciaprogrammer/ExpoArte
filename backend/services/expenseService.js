@@ -17,8 +17,25 @@ const getTotalExpensesByUser = async () => {
   }, {});
 };
 
+const updateExpense = async (id, data) => {
+  const [updatedRowsCount, updatedRows] = await Expense.update(data, {
+    where: { id },
+    returning: true
+  });
+  return updatedRowsCount ? updatedRows[0] : null;
+};
+
+const deleteExpense = async (id) => {
+  const deletedRows = await Expense.destroy({
+    where: { id }
+  });
+  return deletedRows > 0;
+};
+
 module.exports = {
   createExpense,
   getAllExpenses,
-  getTotalExpensesByUser
+  getTotalExpensesByUser,
+  updateExpense,
+  deleteExpense
 };

@@ -30,4 +30,36 @@ const getTotalExpensesByUser = async (req, res) => {
   }
 };
 
-module.exports = { createExpense, getAllExpenses, getTotalExpensesByUser };
+const updateExpense = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updated = await expenseService.updateExpense(id, req.body);
+    if (!updated) {
+      return res.status(404).json({ error: 'Expense not found' });
+    }
+    res.json(updated);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const deleteExpense = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted = await expenseService.deleteExpense(id);
+    if (!deleted) {
+      return res.status(404).json({ error: 'Expense not found' });
+    }
+    res.json({ message: 'Expense deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { 
+  createExpense, 
+  getAllExpenses, 
+  getTotalExpensesByUser,
+  updateExpense,
+  deleteExpense,
+};

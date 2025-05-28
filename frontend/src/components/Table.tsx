@@ -3,9 +3,10 @@ import styles from './Table.module.css';
 export interface TableProps {
   headers: string[];
   rows: (string | number)[][];
+  onRowClick?: (index: number) => void;
 }
 
-export default function Table({ headers, rows }: TableProps) {
+export default function Table({ headers, rows, onRowClick }: TableProps) {
   if (!rows) return null; // O algún spinner de carga
 
   return (
@@ -19,7 +20,7 @@ export default function Table({ headers, rows }: TableProps) {
       </thead>
       <tbody>
         {rows.map((row, i) => (
-          <tr key={i}>
+          <tr key={i} onClick={() => onRowClick?.(i)} style={{ cursor: 'pointer' }}>
             {row.map((cell, j) => (
               <td key={j}>{cell}</td>
             ))}
