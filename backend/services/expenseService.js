@@ -32,6 +32,7 @@ const deleteExpense = async (id) => {
   return deletedRows > 0;
 };
 
+
 module.exports = {
   createExpense,
   getAllExpenses,
@@ -39,3 +40,5 @@ module.exports = {
   updateExpense,
   deleteExpense
 };
+
+

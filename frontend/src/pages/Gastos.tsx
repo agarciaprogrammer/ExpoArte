@@ -100,12 +100,12 @@ export default function Gastos() {
         ))}
 
         <Table
-          headers={['Descripción', 'Monto', 'Fecha', 'Organizadora', '']}
+          headers={['Descripción', 'Organizadora',  'Monto', 'Fecha', '']}
           rows={expenses.map(exp => [
             exp.description,
+            exp.organizer,
             `$${Number(exp.amount).toFixed(2)}`,
             exp.date,
-            exp.organizer,
             <button className={globalStyles.buttonDelete} onClick={(e) => {
               e.stopPropagation();
               handleDelete(exp.id);

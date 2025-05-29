@@ -31,14 +31,14 @@ Este proyecto es una aplicación web Full Stack pensada para ayudar a organizar 
 - Como **admin**, quiero ver una tabla con los gastos detallados.
 - Como **admin**, quiero ver el **total de gastos general** y **por cada organizadora**.
 
-### Ingresos (`/home/income`)
-- Como **admin**, quiero ver una tabla de ingresos (preventa + taquilla).
-- Como **admin**, quiero ver el total recaudado y el desglose por método de pago y origen (preventa o taquilla).
-
 ### Entradas: Preventa (`/home/preorders`)
 - Como **admin**, quiero registrar entradas vendidas en preventa con datos del comprador.
 - Como **admin**, quiero editar o eliminar registros de preventa si es necesario.
 - Como **admin**, quiero ver una lista de preventas ordenadas por fecha o nombre.
+
+### Ingresos (`/home/income`)
+- Como **admin**, quiero ver una tabla de ingresos (preventa + taquilla).
+- Como **admin**, quiero ver el total recaudado y el desglose por método de pago y origen (preventa o taquilla).
 
 ### Dashboard (`/home/dashboard`)
 - Como **admin**, quiero ver un resumen general con:

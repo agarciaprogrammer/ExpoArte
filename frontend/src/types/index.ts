@@ -5,3 +5,13 @@ export interface Expense {
   date: string;
   organizer: string;
 }
+
+export interface PreSale {
+  id: number;
+  fullName: string;
+  quantity: number;
+  finalPrice: number;
+  paymentMethod: string;
+  date: string;
+}
+

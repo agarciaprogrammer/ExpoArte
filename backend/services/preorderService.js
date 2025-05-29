@@ -5,16 +5,9 @@ const createPreorder = async (data) => {
   return await Preorder.create(data);
 };
 
-const getAllPreorders = async (page = 1, pageSize = 10, filters = {}) => {
-  const offset = (page - 1) * pageSize;
-  
-  return await Preorder.findAndCountAll({
-    where: filters,
-    limit: pageSize,
-    offset: offset,
-    include: [User, Attendance]
-  });
-};
+const getAllPreorders = async () => {
+  return await Preorder.findAll();
+}
 
 const updateCheckedInCount = async (preorderId, newCount) => {
   const preorder = await Preorder.findByPk(preorderId);
@@ -23,8 +16,27 @@ const updateCheckedInCount = async (preorderId, newCount) => {
   return await preorder.save();
 };
 
+const getPreorderById = async (id) => {
+  return await Preorder.findByPk(id);
+};
+
+const updatePreorder = async (id, data) => {
+  const preorder = await Preorder.findByPk(id);
+  if (!preorder) throw new Error('Preorder not found');
+  return await preorder.update(data);
+};
+
+const deletePreorder = async (id) => {
+  const preorder = await Preorder.findByPk(id);
+  if (!preorder) throw new Error('Preorder not found');
+  return await preorder.destroy();
+}
+
 module.exports = {
   createPreorder,
   getAllPreorders,
-  updateCheckedInCount
+  updateCheckedInCount,
+  getPreorderById,
+  updatePreorder,
+  deletePreorder
 };
