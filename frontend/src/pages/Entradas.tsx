@@ -11,9 +11,17 @@ export default function Preventa() {
   const [showForm, setShowForm] = useState(false);
   const [preSales, setPreSales] = useState<PreSale[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [sortConfig, setSortConfig] = useState<{ index: number; direction: 'asc' | 'desc' } | null>(null);
+  const [showFilters, setShowFilters] = useState(false);
+  const [originalPreSales, setOriginalPreSales] = useState<PreSale[]>([]);
 
+  
+  const [filters, setFilters] = useState({
+    paymentMethod: '',
+    fromDate: '',
+    toDate: ''
+  });
   const ENTRADA_UNITARIA = 3000; // Precio fijo temporal
-
   const [form, setForm] = useState({
   fullName: '',
   quantity: 0,
@@ -22,7 +30,6 @@ export default function Preventa() {
   date: '',
 });
 
-
   useEffect(() => {
     fetchPreSales();
   }, []);
@@ -30,11 +37,37 @@ export default function Preventa() {
   const fetchPreSales = async () => {
     try {
       const data = await getPreSales();
-      setPreSales(data);
+      const sorted = data.sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      setPreSales(sorted);
+      setOriginalPreSales(sorted);
     } catch (error) {
       console.error('Error al obtener preventas:', error);
       alert('Ocurrió un error al cargar las preventas.');
     }
+  };
+
+  
+const handleSort = (index: number) => {
+    let direction: 'asc' | 'desc' = 'asc';
+    if (sortConfig?.index === index && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+
+    const sorted = [...preSales].sort((a, b) => {
+      const aVal = Object.values(a)[index];
+      const bVal = Object.values(b)[index];
+
+      if (typeof aVal === 'number' && typeof bVal === 'number') {
+        return direction === 'asc' ? aVal - bVal : bVal - aVal;
+      }
+
+      return direction === 'asc'
+        ? String(aVal).localeCompare(String(bVal))
+        : String(bVal).localeCompare(String(aVal));
+    });
+
+    setPreSales(sorted);
+    setSortConfig({ index, direction });
   };
 
 
@@ -104,6 +137,7 @@ export default function Preventa() {
   };
 
   const totalGeneral = preSales.reduce((acc, p) => acc + p.finalPrice, 0);
+  const totalCantidad = preSales.reduce((acc, p) => acc + p.quantity, 0);
 
   return (
     <>
@@ -113,7 +147,8 @@ export default function Preventa() {
         <button className={globalStyles.button} onClick={() => setShowForm(true)}>Agregar Preventa</button>
 
         <p className={globalStyles.text}><strong>Total general:</strong> ${totalGeneral.toFixed(2)}</p>
-
+        <p className={globalStyles.text}><strong>Cantidad de entradas vendidas:</strong> {totalCantidad}</p>
+        <button className={globalStyles.button} onClick={() => setShowFilters(true)}>Filtros</button>
         <Table
           headers={['Comprador', 'Cantidad', 'Precio total', 'Método de Pago', 'Fecha', '']}
           rows={preSales.map(p => [
@@ -131,6 +166,7 @@ export default function Preventa() {
             >Eliminar</button>
           ])}
           onRowClick={(index) => handleRowClick(preSales[index])}
+          onSort={handleSort}
         />
       </div>
 
@@ -152,6 +188,36 @@ export default function Preventa() {
           <p className={globalStyles.text}><strong>Total calculado:</strong> ${form.finalPrice}</p>
 
           <button type="submit" className={globalStyles.button}>Guardar</button>
+        </form>
+      </Modal>
+
+      <Modal isOpen={showFilters} onClose={() => setShowFilters(false)} title="Filtrar preventas">
+        <form onSubmit={(e) => {
+          e.preventDefault();
+
+          let filtered = [...originalPreSales];
+          if (filters.paymentMethod) {
+            filtered = filtered.filter(p => p.paymentMethod === filters.paymentMethod);
+          }
+          if (filters.fromDate) {
+            filtered = filtered.filter(p => new Date(p.date) >= new Date(filters.fromDate));
+          }
+          if (filters.toDate) {
+            filtered = filtered.filter(p => new Date(p.date) <= new Date(filters.toDate));
+          }
+
+          setPreSales(filtered);
+          setShowFilters(false);
+        }}>
+          <FormField
+            label="Método de Pago"
+            name="paymentMethod"
+            type="select"
+            value={filters.paymentMethod}
+            onChange={(e) => setFilters({ ...filters, paymentMethod: e.target.value })}
+            options={['Transferencia', 'MercadoPago', 'Efectivo']}
+          />
+          <button type="submit" className={globalStyles.button}>Aplicar Filtros</button>
         </form>
       </Modal>
     </>

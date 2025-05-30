@@ -4,9 +4,10 @@ export interface TableProps {
   headers: string[];
   rows: (string | number)[][];
   onRowClick?: (index: number) => void;
+  onSort?: (index: number) => void;
 }
 
-export default function Table({ headers, rows, onRowClick }: TableProps) {
+export default function Table({ headers, rows, onRowClick, onSort }: TableProps) {
   if (!rows) return null; // O algún spinner de carga
 
   return (
@@ -14,7 +15,9 @@ export default function Table({ headers, rows, onRowClick }: TableProps) {
       <thead>
         <tr>
           {headers.map((header, i) => (
-            <th key={i}>{header}</th>
+            <th key={i} onClick={() => onSort?.(i)} style={{cursor: 'pointer'}}>
+              {header}
+            </th>
           ))}
         </tr>
       </thead>

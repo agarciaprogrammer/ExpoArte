@@ -6,9 +6,10 @@ export interface FormFieldProps {
   value: string | number;
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   options?: string[];
+  required?: boolean;
 }
 
-export default function FormField({ label, type, name, value, onChange, options }: FormFieldProps) {
+export default function FormField({ label, type, name, value, onChange, options, required }: FormFieldProps) {
   return (
     <div className={styles.field}>
       <label htmlFor={name} className={styles.label}>{label}</label>
@@ -19,7 +20,7 @@ export default function FormField({ label, type, name, value, onChange, options 
           value={value}
           onChange={onChange}
           className={styles.select}
-          required
+          required={required}
         >
           <option value="">Seleccionar</option>
           {options.map((opt) => (
