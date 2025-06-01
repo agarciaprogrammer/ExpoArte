@@ -182,7 +182,7 @@ const handleSort = (index: number) => {
             type="select"
             value={form.paymentMethod}
             onChange={handleChange}
-            options={['Transferencia', 'MercadoPago', 'Efectivo']}
+            options={['MercadoPago', 'Efectivo']}
           />
 
           <p className={globalStyles.text}><strong>Total calculado:</strong> ${form.finalPrice}</p>
@@ -215,7 +215,7 @@ const handleSort = (index: number) => {
             type="select"
             value={filters.paymentMethod}
             onChange={(e) => setFilters({ ...filters, paymentMethod: e.target.value })}
-            options={['Transferencia', 'MercadoPago', 'Efectivo']}
+            options={['MercadoPago', 'Efectivo']}
           />
           <button type="submit" className={globalStyles.button}>Aplicar Filtros</button>
         </form>

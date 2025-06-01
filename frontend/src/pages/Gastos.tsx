@@ -74,13 +74,13 @@ export default function Gastos() {
   const totalGeneral = expenses.reduce((acc, exp) => acc + Number(exp.amount), 0);
 
   const totalesPorOrganizadora: { [key: string]: number } = expenses.reduce(
-  (acc: { [key: string]: number }, exp) => {
-    if (!acc[exp.organizer]) acc[exp.organizer] = 0;
-    acc[exp.organizer] += Number(exp.amount);
-    return acc;
-  },
-  {}
-);
+    (acc: { [key: string]: number }, exp) => {
+      if (!acc[exp.organizer]) acc[exp.organizer] = 0;
+      acc[exp.organizer] += Number(exp.amount);
+      return acc;
+    },
+    {}
+  );
 
   return (
     <>

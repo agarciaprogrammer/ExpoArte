@@ -8,9 +8,8 @@ export default function Navbar() {
       <ul className={styles.navList}>
         <li><Link to="/home" className={styles.link}>Inicio</Link></li>
         <li><Link to="/gastos" className={styles.link}>Gastos</Link></li>
-        <li><Link to="/ingresos" className={styles.link}>Ingresos</Link></li>
+        <li><Link to="/entradas" className={styles.link}>Preventa</Link></li>
         <li><Link to="/dashboard" className={styles.link}>Dashboard</Link></li>
-        <li><Link to="/entradas" className={styles.link}>Entradas</Link></li>
         <li><Link to="/configuracion" className={styles.link}>Configuración</Link></li>
       </ul>
     </nav>

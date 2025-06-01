@@ -1,6 +1,72 @@
-.subtitle {
-  font-size: 1.25rem;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-  color: #2c2c2e;
+.cardsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+  opacity: 0;
+  animation: fadeIn 0.8s ease forwards;
 }
+
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 7px 10px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e5ea;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideIn 0.5s ease forwards;
+  animation-delay: calc(var(--i, 0) * 100ms);
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.cardTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1c1c1e;
+  margin-bottom: 0.5rem;
+}
+
+.cardValue {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #0071e3;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.iaraCard {
+  background: linear-gradient(135deg, #f0fff1, #cdfacd);
+}
+
+.kateCard {
+  background: linear-gradient(135deg, #f8e4e6, #ffccd3);
+}
+
+.positiveText {
+  color: #2ecc71;
+}
+
+.negativeText {
+  color: #e74c3c;
+}
+
+
