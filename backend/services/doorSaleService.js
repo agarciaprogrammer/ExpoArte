@@ -1,15 +1,28 @@
-// services/doorSaleService.js
-const { DoorSale, User } = require('../models');
+const { DoorSale } = require('../models');
 
-const createDoorSale = async (data) => {
+async function getAllDoorSales() {
+  return await DoorSale.findAll({ order: [['date', 'DESC']] });
+}
+
+async function createDoorSale(data) {
   return await DoorSale.create(data);
-};
+}
 
-const getAllDoorSales = async () => {
-  return await DoorSale.findAll({ include: User });
-};
+async function updateDoorSale(id, data) {
+  const sale = await DoorSale.findByPk(id);
+  if (!sale) throw new Error('Venta no encontrada');
+  return await sale.update(data);
+}
+
+async function deleteDoorSale(id) {
+  const sale = await DoorSale.findByPk(id);
+  if (!sale) throw new Error('Venta no encontrada');
+  return await sale.destroy();
+}
 
 module.exports = {
+  getAllDoorSales,
   createDoorSale,
-  getAllDoorSales
+  updateDoorSale,
+  deleteDoorSale
 };

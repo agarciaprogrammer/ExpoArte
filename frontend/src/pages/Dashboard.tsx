@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Navbar from '../components/Navbar';
 //import Card from '../components/Card';
 import globalStyles from './styles/Global.module.css';
 import styles from './styles/Dashboard.module.css';
@@ -87,7 +86,6 @@ export default function Dashboard() {
 
   return (
     <>
-      <Navbar />
       <div className={globalStyles.container}>
         <h1 className={globalStyles.title}>Dashboard</h1>
         <div className={styles.cardsContainer}>

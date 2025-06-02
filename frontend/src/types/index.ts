@@ -13,5 +13,15 @@ export interface PreSale {
   finalPrice: number;
   paymentMethod: string;
   date: string;
+  checkedInCount?: number;
+}
+
+export interface DoorSale {
+  id: number;
+  fullName: string;
+  quantity: number;
+  finalPrice: number;
+  paymentMethod: string;
+  date: string;
 }
 

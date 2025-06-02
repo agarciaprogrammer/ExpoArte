@@ -1,5 +1,4 @@
 import globalStyles from './styles/Global.module.css';
-import Navbar from '../components/Navbar';
 import Table from '../components/Table';
 import FormField from '../components/FormField';
 import Modal from '../components/Modal';
@@ -84,7 +83,6 @@ export default function Gastos() {
 
   return (
     <>
-      <Navbar />
       <div className={globalStyles.container}>
         <h2 className={globalStyles.title}>Gestión de Gastos</h2>
         <button className={globalStyles.button} onClick={handleAddExpense}>

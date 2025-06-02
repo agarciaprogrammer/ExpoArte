@@ -13,10 +13,14 @@ export async function createPreSale(data: Omit<PreSale, 'id'>): Promise<PreSale>
   return response.data;
 }
 
-export async function updatePreSale(id: number, data: Omit<PreSale, 'id'>): Promise<PreSale> {
-  const response = await axios.put<PreSale>(`${API_URL}/${id}`, data);
-  return response.data;
+export async function updatePreSale(
+    id: number,
+    data: Omit<PreSale, 'id'> & { checkedInCount: number }
+  ): Promise<PreSale> {
+    const response = await axios.put<PreSale>(`${API_URL}/${id}`, data);
+    return response.data;
 }
+
 
 export async function deletePreSale(id: number): Promise<void> {
   await axios.delete(`${API_URL}/${id}`);
