@@ -15,3 +15,13 @@ export async function createDoorSale(
   return response.data;
 }
 
+export async function updateDoorSale( id: number, data: Omit<DoorSale, 'id'>): Promise<DoorSale> {
+  const response = await axios.put<DoorSale>(`${API_URL}/${id}`, data);
+  return response.data;
+
+}
+
+export async function deleteDoorSale(id: number): Promise<void> {
+  await axios.delete(`${API_URL}/${id}`);
+}
+

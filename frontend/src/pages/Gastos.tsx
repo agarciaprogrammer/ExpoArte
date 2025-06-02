@@ -70,17 +70,6 @@ export default function Gastos() {
     fetchExpenses();
   };
 
-  const totalGeneral = expenses.reduce((acc, exp) => acc + Number(exp.amount), 0);
-
-  const totalesPorOrganizadora: { [key: string]: number } = expenses.reduce(
-    (acc: { [key: string]: number }, exp) => {
-      if (!acc[exp.organizer]) acc[exp.organizer] = 0;
-      acc[exp.organizer] += Number(exp.amount);
-      return acc;
-    },
-    {}
-  );
-
   return (
     <>
       <div className={globalStyles.container}>
@@ -88,15 +77,6 @@ export default function Gastos() {
         <button className={globalStyles.button} onClick={handleAddExpense}>
           Agregar Gasto
         </button>
-
-        <p className={globalStyles.text}><strong>Total general:</strong> ${totalGeneral.toFixed(2)}</p>
-
-        {Object.entries(totalesPorOrganizadora).map(([organizer, total]) => (
-          <p key={organizer} className={globalStyles.text}>
-            <strong>{organizer}:</strong> ${total.toFixed(2)}
-          </p>
-        ))}
-
         <Table
           headers={['Descripción', 'Organizadora',  'Monto', 'Fecha', '']}
           rows={expenses.map(exp => [

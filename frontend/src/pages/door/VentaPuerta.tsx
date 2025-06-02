@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { createDoorSale, getDoorSales } from '../../services/doorSaleService';
+import { createDoorSale, getDoorSales, updateDoorSale, deleteDoorSale } from '../../services/doorSaleService';
 import type { DoorSale } from '../../types';
 import Modal from '../../components/Modal';
 import FormField from '../../components/FormField';
@@ -9,10 +9,14 @@ import Table from '../../components/Table';
 export default function DoorSale() {
   const [doorSales, setDoorSales] = useState<DoorSale[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const [fullName, setFullName] = useState('');
-  const [quantity, setQuantity] = useState(1);
-  const [paymentMethod, setPaymentMethod] = useState('');
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [successMessage, setSuccessMessage] = useState('');
+
+  const [form, setForm] = useState({
+    fullName: '',
+    quantity: 0,
+    paymentMethod: '',
+  });
 
   const ENTRADA_PUERTA = 4000;
 
@@ -34,74 +38,103 @@ export default function DoorSale() {
     fetchDoorSales();
   }, []);
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: name === 'quantity' ? Number(value) : value });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!fullName.trim() || quantity < 1 || !paymentMethod) return;
-
     const newSale: Omit<DoorSale, 'id'> = {
-      fullName,
-      quantity,
-      finalPrice: quantity * ENTRADA_PUERTA,
-      paymentMethod,
+      fullName: form.fullName,
+      quantity: form.quantity,
+      finalPrice: form.quantity * ENTRADA_PUERTA,
+      paymentMethod: form.paymentMethod,
       date: new Date().toISOString(),
     };
 
     try {
-      await createDoorSale(newSale);
-      setSuccessMessage('Entrada registrada correctamente');
-      setFullName('');
-      setQuantity(1);
-      setPaymentMethod('');
-      setShowModal(false);
+      if (editingId !== null) {
+        await updateDoorSale(editingId, newSale);
+        setSuccessMessage('Entrada actualizada correctamente');
+      } else {
+        await createDoorSale(newSale);
+        setSuccessMessage('Entrada registrada correctamente');
+      }
+
       fetchDoorSales();
+      setForm({ fullName: '', quantity: 1, paymentMethod: '' });
+      setEditingId(null);
+      setShowModal(false);
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (error) {
-      console.error('Error registrando una entrada: ', error);
+      console.error('Error guardando entrada: ', error);
     }
   };
 
-  
+  const handleRowClick = (sale: DoorSale) => {
+    setForm({
+      fullName: sale.fullName,
+      quantity: sale.quantity,
+      paymentMethod: sale.paymentMethod,
+    });
+    setEditingId(sale.id);
+    setShowModal(true);
+  };
 
-return (
+  const handleDelete = async (id: number) => {
+    const confirmDelete = window.confirm("¿Estás seguro de eliminar esta entrada?");
+    if (!confirmDelete) return;
+
+    try {
+      await deleteDoorSale(id);
+      fetchDoorSales();
+    } catch (error) {
+      console.error("Error eliminando la entrada: ", error);
+    }
+  };
+
+  return (
     <div className={styles.container}>
       <h1 className={styles.title}>Venta en Puerta</h1>
       <p className={styles.subtitle}>Registro de entradas vendidas en el momento del evento.</p>
 
+      <button className={styles.button} onClick={() => {
+        setForm({ fullName: '', quantity: 1, paymentMethod: '' });
+        setEditingId(null);
+        setShowModal(true);
+      }}>Agregar entrada</button>
+
       {successMessage && <p className={styles.success}>{successMessage}</p>}
 
-      <button className={styles.button} onClick={() => setShowModal(true)}>Agregar entrada</button>
-
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="Agregar entrada">
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title={editingId ? "Editar entrada" : "Agregar entrada"}>
         <form onSubmit={handleSubmit}>
           <FormField
             label="Nombre completo"
             name="fullName"
             type="text"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
+            value={form.fullName}
+            onChange={handleChange}
             required
           />
-
           <FormField
             label="Cantidad"
             name="quantity"
             type="number"
-            value={quantity}
-            onChange={(e) => setQuantity(Number(e.target.value))}
+            value={form.quantity}
+            onChange={handleChange}
             required
           />
-
           <FormField
             label="Método de pago"
             name="paymentMethod"
             type="select"
-            value={paymentMethod}
-            onChange={(e) => setPaymentMethod(e.target.value)}
+            value={form.paymentMethod}
+            onChange={handleChange}
             options={['Efectivo', 'MercadoPago']}
             required
           />
-
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
             <button type="submit">Guardar</button>
           </div>
@@ -110,13 +143,18 @@ return (
 
       <h2 className={styles.subtitle}>Entradas vendidas en puerta</h2>
       <Table
-        headers={['Comprador', 'Cantidad', 'Método de Pago', 'Fecha']}
+        headers={['Comprador', 'Cantidad', 'Método de Pago', 'Fecha', '']}
         rows={doorSales.map((d) => [
           d.fullName,
           d.quantity,
           d.paymentMethod || '-',
           d.date,
+          <button className={styles.buttonDelete} onClick={(e) => {
+            e.stopPropagation();
+            handleDelete(d.id);
+          }}>Eliminar</button>
         ])}
+        onRowClick={(index) => handleRowClick(doorSales[index])}
       />
     </div>
   );

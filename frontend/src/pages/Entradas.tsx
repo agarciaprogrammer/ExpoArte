@@ -135,17 +135,15 @@ const handleSort = (index: number) => {
     fetchPreSales();
   };
 
-  const totalGeneral = preSales.reduce((acc, p) => acc + p.finalPrice, 0);
-  const totalCantidad = preSales.reduce((acc, p) => acc + p.quantity, 0);
+  
 
   return (
     <>
       <div className={globalStyles.container}>
         <h2 className={globalStyles.title}>Entradas: Preventa</h2>
         <button className={globalStyles.button} onClick={() => setShowForm(true)}>Agregar Preventa</button>
-
-        <p className={globalStyles.text}><strong>Total general:</strong> ${totalGeneral.toFixed(2)}</p>
-        <p className={globalStyles.text}><strong>Cantidad de entradas vendidas:</strong> {totalCantidad}</p>
+        <br />
+        <br />
         <button className={globalStyles.button} onClick={() => setShowFilters(true)}>Filtros</button>
         <Table
           headers={['Comprador', 'Cantidad', 'Precio total', 'Método de Pago', 'Fecha', '']}
