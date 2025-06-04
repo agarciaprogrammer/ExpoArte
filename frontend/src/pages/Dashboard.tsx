@@ -8,6 +8,10 @@ import { getDoorSales } from '../services/doorSaleService';
 import type { Expense } from '../types';
 import type { PreSale } from '../types';
 import type { DoorSale } from '../types';
+import { Pie } from 'react-chartjs-2';
+import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import { processCheckInsByHour } from '../utils/processCheckInsByHour';
 
 
 export default function Dashboard() {
@@ -54,6 +58,7 @@ export default function Dashboard() {
 
   const ganancia = (totalPreventa + totalPuerta) - totalGastos;
 
+  Chart.register(ArcElement, Tooltip, Legend);
   // Ganancias repartidas
   const gastoIara = totalGastosOrganizadora('Iara');
   const gastoKate = totalGastosOrganizadora('Kate');
@@ -63,7 +68,8 @@ export default function Dashboard() {
 
   const gananciaIara = gastoIara + mitadRestante;
   const gananciaKate = gastoKate + mitadRestante;
-  const gordo = ganancia * 0.05;
+
+  const dataByHour = processCheckInsByHour(preventas);
 
   const cardsGastos = [
     { title: 'Gastos - Iara', value: formatCurrency(totalGastosOrganizadora('Iara')), cardClass: styles.iaraCard, valueClass: '', },
@@ -96,6 +102,35 @@ export default function Dashboard() {
     { title: 'Ganancias - Kate', value: formatCurrency(gananciaKate), cardClass: styles.kateCard, valueClass: '', },
   ];
 
+  // Gráfico 1 - Dinero preventa vs puerta
+  const pieDataMoney = {
+    labels: ['Preventa', 'Puerta'],
+    datasets: [
+      {
+        label: 'Ingresos',
+        data: [totalPreventa, totalPuerta],
+        backgroundColor: ['#4e73df', '#1cc88a'],
+        hoverOffset: 20,
+      },
+    ],
+  };
+
+  // Gráfico 2 - Asistencia preventa (Ingresaron, No asistieron)
+  const totalEntradasPreventaCantidad = preventas.reduce((acc, p) => acc + p.quantity, 0);
+  const totalAsistieron = preventas.reduce((acc, p) => acc + (p.checkedInCount ?? 0), 0);
+  const totalNoAsistieron = totalEntradasPreventaCantidad - totalAsistieron;
+
+  const pieDataAttendance = {
+    labels: ['Asistieron', 'No asistieron'],
+    datasets: [
+      {
+        label: 'Personas',
+        data: [totalAsistieron, totalNoAsistieron],
+        backgroundColor: ['#36a2eb', '#ff6384'],
+        hoverOffset: 20,
+      },
+    ],
+  };
 
   return (
     <>
@@ -152,8 +187,44 @@ export default function Dashboard() {
 
         <section className={styles.dashboardSection}>
           <h2 className={styles.sectionTitle}>Gráficos</h2>
-          {/* Aquí van los gráficos que vamos a agregar después */}
+          <div className={styles.cardsContainer}>
+            <div className={styles.card}>
+              <div className={styles.cardTitle}>Ingresos Preventa vs Puerta</div>
+              <div style={{ height: '250px' }}>
+                <Pie data={pieDataMoney} />
+              </div>
+            </div>
+
+            <div className={styles.card}>
+              <div className={styles.cardTitle}>Asistencia Preventa</div>
+              <div style={{ height: '250px' }}>
+                <Pie data={pieDataAttendance} />
+              </div>
+            </div>
+
+            <div className={styles.card}>
+              <div className={styles.cardTitle}>Asistencia Preventa</div>
+              <div style={{ height: '250px' }}>
+                <Pie data={pieDataAttendance} />
+              </div>
+            </div>    
+          </div>
         </section>
+
+        <section className={styles.dashboardSection}>
+          <div className={styles.card} style={{ minHeight: '350px' }}>
+            <div className={styles.cardTitle}>Check-ins por hora</div>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={dataByHour}>
+                  <XAxis dataKey="hour" />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip />
+                  <Bar dataKey="people" fill="#8884d8" />
+                </BarChart>
+              </ResponsiveContainer>
+          </div>             
+        </section>
+
       </div>
     </>
   );

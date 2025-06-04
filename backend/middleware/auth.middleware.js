@@ -1,16 +1,16 @@
-// src/middlewares/auth.middleware.js
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-module.exports = function (req, res, next) {
+module.exports = (req, res, next) => {
   const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+  const token = authHeader?.split(' ')[1];
+  console.log('JWT_SECRET:', process.env.JWT_SECRET);
 
   if (!token) return res.status(401).json({ message: 'Token requerido' });
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) return res.status(403).json({ message: 'Token inválido' });
-    req.user = user;
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) return res.status(403).json({ message: 'Token expirado o inválido' });
+    req.user = decoded;
     next();
   });
 };

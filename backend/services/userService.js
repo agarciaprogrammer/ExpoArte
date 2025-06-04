@@ -1,4 +1,3 @@
-// services/userService.js
 const { User } = require('../models');
 
 const createUser = async (data) => {
@@ -13,13 +12,13 @@ const getUserById = async (id) => {
   return await User.findByPk(id);
 };
 
-const getUserByEmail = async (email) => {
-  return await User.findOne({ where: { email } });
+const getUserByUsername = async (username) => {
+  return await User.findOne({ where: { username } });
 };
 
 module.exports = {
   createUser,
   getAllUsers,
   getUserById,
-  getUserByEmail
+  getUserByUsername
 };

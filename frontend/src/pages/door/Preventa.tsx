@@ -16,6 +16,7 @@ export default function PreSaleList() {
   const loadEntries = async () => {
     try {
       const data = await getPreSales();
+      console.log(data);
       setEntries(data);
       setLoading(false);
     } catch (error) {

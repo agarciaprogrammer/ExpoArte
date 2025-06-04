@@ -29,9 +29,9 @@ function App() {
 
         {/* Rutas ENCARGADO */}
         <Route element={<EncargadoLayout />}>
-          <Route path="/encargado/home" element={<DoorHome />} />
-          <Route path="/encargado/preventa" element={<PreSaleList />} />
-          <Route path="/encargado/puerta" element={<DoorSale />} />
+          <Route path="/door/home" element={<DoorHome />} />
+          <Route path="/door/preventa" element={<PreSaleList />} />
+          <Route path="/door/puerta" element={<DoorSale />} />
         </Route>
       </Routes>
     </Router>

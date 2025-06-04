@@ -14,6 +14,7 @@ export interface PreSale {
   paymentMethod: string;
   date: string;
   checkedInCount?: number;
+  updatedAt: string;
 }
 
 export interface DoorSale {
@@ -24,4 +25,11 @@ export interface DoorSale {
   paymentMethod: string;
   date: string;
 }
+
+export interface User {
+  id: number;
+  username: string;
+  role: 'admin' | 'door';
+}
+
 

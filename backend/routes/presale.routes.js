@@ -5,21 +5,12 @@ const presaleController = require('../controllers/preorderController');
 const authMiddleware = require('../middleware/auth.middleware.js');
 const roleMiddleware = require('../middleware/role.middleware.js');
 
-//router.use(authMiddleware);
+router.use(authMiddleware);
 
-router.post('/', presaleController.createPreorder);
-router.get('/', presaleController.getAllPreorders);
-router.put('/:id', presaleController.updatePreorder);
-router.delete('/:id', presaleController.deletePreorder);
-router.put('/:id/attendance', presaleController.updateCheckedInCount);
-
-
-/*
-router.get('/', roleMiddleware(['admin', 'door']), presaleController.getAll);
-router.post('/', roleMiddleware(['admin']), presaleController.create);
-router.put('/:id/attendance', roleMiddleware(['door']), presaleController.updateAttendance);
-router.put('/:id', roleMiddleware(['admin']), presaleController.updatePreorder);
+router.post('/', roleMiddleware(['admin']), presaleController.createPreorder);
+router.get('/', roleMiddleware(['admin', 'door']), presaleController.getAllPreorders);
+router.put('/:id', roleMiddleware(['admin', 'door']), presaleController.updatePreorder);
 router.delete('/:id', roleMiddleware(['admin']), presaleController.deletePreorder);
-*/
+router.put('/:id/attendance', roleMiddleware(['admin', 'door']), presaleController.updateCheckedInCount);
 
 module.exports = router;
