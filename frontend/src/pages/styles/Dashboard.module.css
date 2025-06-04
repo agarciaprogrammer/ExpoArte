@@ -58,7 +58,7 @@
 }
 
 .kateCard {
-  background: linear-gradient(135deg, #f8e4e6, #ffccd3);
+  background: linear-gradient(135deg, #f5e4f8, #fdccff);
 }
 
 .positiveText {
@@ -68,5 +68,19 @@
 .negativeText {
   color: #e74c3c;
 }
+
+.dashboardSection {
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  font-size: 1.0rem;
+  font-weight: 600;
+  margin-bottom: -2rem;
+  color: #333;
+  border-left: 4px solid #999;
+  padding-left: 0.5rem;
+}
+
 
 
