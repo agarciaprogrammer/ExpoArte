@@ -6,7 +6,9 @@ const roleMiddleware = require('../middleware/role.middleware');
 
 router.use(authMiddleware);
 
-router.get('/', roleMiddleware(['admin']), settingController.getSettings);
-router.put('/', roleMiddleware(['admin']), settingController.updateTicketPrice);
+router.get('/', settingController.getSettings);
+router.put('/', roleMiddleware(['admin']), settingController.updateTicketPrices);
+router.put('/change-password', roleMiddleware(['admin']), settingController.changePassword);
+router.get('/report', roleMiddleware(['admin']), settingController.downloadReport);
 
 module.exports = router;

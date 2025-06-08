@@ -5,6 +5,8 @@ import Modal from '../components/Modal';
 import type { PreSale } from '../types';
 import { useState, useEffect } from 'react';
 import { getPreSales, createPreSale, deletePreSale, updatePreSale } from '../services/presaleService.ts';
+import { getEntryPrices } from '../services/configService.ts';
+import { FaTrashAlt } from "react-icons/fa";
 
 export default function Preventa() {
   const [showForm, setShowForm] = useState(false);
@@ -13,24 +15,25 @@ export default function Preventa() {
   const [sortConfig, setSortConfig] = useState<{ index: number; direction: 'asc' | 'desc' } | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [originalPreSales, setOriginalPreSales] = useState<PreSale[]>([]);
-
-  
   const [filters, setFilters] = useState({
     paymentMethod: '',
     fromDate: '',
     toDate: ''
   });
-  const ENTRADA_UNITARIA = 3000; // Precio fijo temporal
+  const [ticketPrice, setTicketPrice] = useState<number>(0);
   const [form, setForm] = useState({
-  fullName: '',
-  quantity: 0,
-  finalPrice: ENTRADA_UNITARIA,
-  paymentMethod: '', // valor por defecto
-  date: '',
-});
+    fullName: '',
+    quantity: 0,
+    finalPrice: 0,
+    paymentMethod: '', // valor por defecto
+    date: '',
+  });
+  const [searchTerm, setSearchTerm] = useState('');
+
 
   useEffect(() => {
     fetchPreSales();
+    fetchTicketPrice();
   }, []);
 
   const fetchPreSales = async () => {
@@ -45,8 +48,18 @@ export default function Preventa() {
     }
   };
 
+  const fetchTicketPrice = async () => {
+    try {
+      const config = await getEntryPrices();
+      setTicketPrice(config.ticketPrice);
+    } catch (error) {
+      console.error('Error al obtener el precio de la entrada:', error);
+      alert('No se pudo cargar el precio de la entrada.');
+    }
+  };
+
   
-const handleSort = (index: number) => {
+  const handleSort = (index: number) => {
     let direction: 'asc' | 'desc' = 'asc';
     if (sortConfig?.index === index && sortConfig.direction === 'asc') {
       direction = 'desc';
@@ -77,7 +90,7 @@ const handleSort = (index: number) => {
       setForm((prev) => ({
         ...prev,
         quantity,
-        finalPrice: quantity * ENTRADA_UNITARIA
+        finalPrice: quantity * ticketPrice
       }));
     } else {
       setForm({ ...form, [name]: value });
@@ -109,7 +122,7 @@ const handleSort = (index: number) => {
     setForm({
       fullName: '',
       quantity: 1,
-      finalPrice: ENTRADA_UNITARIA,
+      finalPrice: 1 * ticketPrice,
       paymentMethod: '',
       date: '',
     });
@@ -135,19 +148,36 @@ const handleSort = (index: number) => {
     fetchPreSales();
   };
 
-  
+  const filteredPreSales = preSales.filter(p =>
+    p.fullName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
 
   return (
     <>
       <div className={globalStyles.container}>
         <h2 className={globalStyles.title}>Entradas: Preventa</h2>
-        <button className={globalStyles.button} onClick={() => setShowForm(true)}>Agregar Preventa</button>
+        {ticketPrice === 0 ? (
+        <p>Cargando precio de entrada...</p>
+          ) : (
+            <button className={globalStyles.button} onClick={() => setShowForm(true)}>Agregar Preventa</button>
+          )}
+
         <br />
         <br />
-        <button className={globalStyles.button} onClick={() => setShowFilters(true)}>Filtros</button>
+        <input
+          type="text"
+          placeholder="Buscar por nombre..."
+          className={globalStyles.input}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+
+        <button className={globalStyles.buttonFilter} onClick={() => setShowFilters(true)}>Filtros</button>
+
         <Table
           headers={['Comprador', 'Cantidad', 'Precio total', 'Método de Pago', 'Fecha', '']}
-          rows={preSales.map(p => [
+          rows={filteredPreSales.map(p => [
             p.fullName,
             p.quantity,
             `$${p.finalPrice}`,
@@ -159,9 +189,9 @@ const handleSort = (index: number) => {
                 e.stopPropagation();
                 handleDelete(p.id);
               }}
-            >Eliminar</button>
+            ><FaTrashAlt size={15} /></button>
           ])}
-          onRowClick={(index) => handleRowClick(preSales[index])}
+          onRowClick={(index) => handleRowClick(filteredPreSales[index])}
           onSort={handleSort}
         />
       </div>

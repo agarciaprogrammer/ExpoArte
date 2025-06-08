@@ -5,6 +5,7 @@ import Modal from '../components/Modal';
 import type { Expense } from '../types';
 import { useState, useEffect } from 'react';
 import { getExpenses, createExpense, deleteExpense, updateExpense } from '../services/expenseService.ts';
+import { FaTrashAlt } from "react-icons/fa";
 
 
 export default function Gastos() {
@@ -87,7 +88,7 @@ export default function Gastos() {
             <button className={globalStyles.buttonDelete} onClick={(e) => {
               e.stopPropagation();
               handleDelete(exp.id);
-            }}>Eliminar</button>
+            }}><FaTrashAlt size={15} /></button>
           ])}
           onRowClick={(index) => handleRowClick(expenses[index])}
         />

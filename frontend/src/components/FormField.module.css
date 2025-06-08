@@ -14,9 +14,11 @@
 .input,
 .select {
   width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  padding: 0.625rem;
+  border: 1px solid #c7c7cc;
+  border-radius: 8px;
   font-size: 1rem;
+  background-color: #f2f2f7;
+  color: #1c1c1e;
   box-sizing: border-box;
 }

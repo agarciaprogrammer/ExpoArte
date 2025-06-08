@@ -3,8 +3,6 @@ interface CheckInBarData {
   hour: string;
   people: number;
 }
-
-  // Puedes cambiar esto fácilmente cuando quieras
   const START_HOUR = 20; // 20:00 (8 PM)
   const END_HOUR = 3;    // 03:00 (3 AM)
 

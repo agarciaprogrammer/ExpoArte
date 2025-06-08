@@ -59,7 +59,7 @@ export default function PreSaleList() {
       <input
         type="text"
         placeholder="Buscar por nombre..."
-        className={styles.inputSearch}
+        className={styles.input}
         value={searchTerm}
         onChange={e => setSearchTerm(e.target.value)}
       />

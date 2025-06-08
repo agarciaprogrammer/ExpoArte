@@ -13,17 +13,19 @@
   padding: 1.5rem;
   box-shadow: 0 7px 10px rgba(0, 0, 0, 0.06);
   border: 1px solid #e5e5ea;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
   opacity: 0;
-  transform: translateY(20px);
   animation: slideIn 0.5s ease forwards;
   animation-delay: calc(var(--i, 0) * 100ms);
   position: relative;
   overflow: hidden;
+  cursor: default;
+  will-change: transform, box-shadow;
+  transform: translateY(20px);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
 }
 
 .card:hover {
-  transform: translateY(-4px);
+  transform: scale(1.015) translateY(-4px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
 

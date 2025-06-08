@@ -11,6 +11,7 @@ const expenseRoutes = require('./routes/expense.routes');
 const doorSaleRoutes = require('./routes/doorSale.routes');
 const presaleRoutes = require('./routes/presale.routes');
 const errorHandler = require('./middleware/errorHandler');
+const settingRotes = require('./routes/setting.routes');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
 
@@ -25,6 +26,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/expenses', expenseRoutes);
 app.use('/api/doorsales', doorSaleRoutes);
 app.use('/api/presales', presaleRoutes);
+app.use('/api/config', settingRotes);
 app.use(errorHandler);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

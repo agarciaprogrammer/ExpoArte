@@ -71,6 +71,8 @@ export default function Dashboard() {
 
   const dataByHour = processCheckInsByHour(preventas);
 
+  
+
   const cardsGastos = [
     { title: 'Gastos - Iara', value: formatCurrency(totalGastosOrganizadora('Iara')), cardClass: styles.iaraCard, valueClass: '', },
     { title: 'Gastos - Kate', value: formatCurrency(totalGastosOrganizadora('Kate')), cardClass: styles.kateCard, valueClass: '', },
@@ -127,6 +129,18 @@ export default function Dashboard() {
         label: 'Personas',
         data: [totalAsistieron, totalNoAsistieron],
         backgroundColor: ['#36a2eb', '#ff6384'],
+        hoverOffset: 20,
+      },
+    ],
+  };
+
+  const pieDataEntradas = {
+    labels: ['Preventa', 'Puerta'],
+    datasets: [
+      {
+        label: 'Ingresos',
+        data: [totalEntradasPreventa, totalEntradasPuerta],
+        backgroundColor: ['#affea3', '#1cc88a'],
         hoverOffset: 20,
       },
     ],
@@ -203,9 +217,9 @@ export default function Dashboard() {
             </div>
 
             <div className={styles.card}>
-              <div className={styles.cardTitle}>Asistencia Preventa</div>
+              <div className={styles.cardTitle}>Entradas Preventa vs Puerta</div>
               <div style={{ height: '250px' }}>
-                <Pie data={pieDataAttendance} />
+                <Pie data={pieDataEntradas} />
               </div>
             </div>    
           </div>

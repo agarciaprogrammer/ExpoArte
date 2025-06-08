@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { createDoorSale, getDoorSales, updateDoorSale, deleteDoorSale } from '../../services/doorSaleService';
+import { getEntryPrices } from '../../services/configService';
 import type { DoorSale } from '../../types';
 import Modal from '../../components/Modal';
 import FormField from '../../components/FormField';
 import styles from '../styles/Global.module.css';
 import Table from '../../components/Table';
+import { FaTrashAlt } from "react-icons/fa";
 
 export default function DoorSale() {
   const [doorSales, setDoorSales] = useState<DoorSale[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [successMessage, setSuccessMessage] = useState('');
+  const [doorPrice, setDoorSalePrice] = useState<number>(0);
 
   const [form, setForm] = useState({
     fullName: '',
@@ -18,7 +21,6 @@ export default function DoorSale() {
     paymentMethod: '',
   });
 
-  const ENTRADA_PUERTA = 4000;
 
   const fetchDoorSales = async () => {
     try {
@@ -34,8 +36,19 @@ export default function DoorSale() {
     }
   };
 
+  const fetchDoorSalePrices = async () => {
+    try {
+      const config = await getEntryPrices();
+      setDoorSalePrice(config.doorSalePrice);
+    } catch (error) {
+      console.error('Error al obtener el precio de la entrada:', error);
+      alert('No se pudo cargar el precio de la entrada.');
+    }
+  };
+
   useEffect(() => {
     fetchDoorSales();
+    fetchDoorSalePrices();
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -49,7 +62,7 @@ export default function DoorSale() {
     const newSale: Omit<DoorSale, 'id'> = {
       fullName: form.fullName,
       quantity: form.quantity,
-      finalPrice: form.quantity * ENTRADA_PUERTA,
+      finalPrice: form.quantity * doorPrice,
       paymentMethod: form.paymentMethod,
       date: new Date().toISOString(),
     };
@@ -152,7 +165,7 @@ export default function DoorSale() {
           <button className={styles.buttonDelete} onClick={(e) => {
             e.stopPropagation();
             handleDelete(d.id);
-          }}>Eliminar</button>
+          }}><FaTrashAlt size={15} /></button>
         ])}
         onRowClick={(index) => handleRowClick(doorSales[index])}
       />

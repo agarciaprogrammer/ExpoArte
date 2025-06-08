@@ -32,4 +32,10 @@ export interface User {
   role: 'admin' | 'door';
 }
 
-
+export interface Setting {
+  id: number;
+  presalePrice: number;
+  doorSalePrice: number;
+  eventDate: string;
+  updatedAt: string;
+}
