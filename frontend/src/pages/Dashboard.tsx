@@ -9,8 +9,8 @@ import type { Expense } from '../types';
 import type { PreSale } from '../types';
 import type { DoorSale } from '../types';
 import { Pie } from 'react-chartjs-2';
-import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import { Tooltip, BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import { Chart, ArcElement, Tooltip as ChartTooltip, Legend } from 'chart.js';
 import { processCheckInsByHour } from '../utils/processCheckInsByHour';
 
 
@@ -58,7 +58,8 @@ export default function Dashboard() {
 
   const ganancia = (totalPreventa + totalPuerta) - totalGastos;
 
-  Chart.register(ArcElement, Tooltip, Legend);
+  Chart.register(ArcElement, ChartTooltip, Legend);
+
   // Ganancias repartidas
   const gastoIara = totalGastosOrganizadora('Iara');
   const gastoKate = totalGastosOrganizadora('Kate');
@@ -232,13 +233,15 @@ export default function Dashboard() {
                 <BarChart data={dataByHour}>
                   <XAxis dataKey="hour" />
                   <YAxis allowDecimals={false} />
-                  <Tooltip />
+                  <Tooltip
+                    formatter={(value: number) => [`${value} personas`, 'Check-ins']}
+                    labelFormatter={(label: string) => `Hora: ${label}`}
+                  />
                   <Bar dataKey="people" fill="#8884d8" />
                 </BarChart>
               </ResponsiveContainer>
           </div>             
         </section>
-
       </div>
     </>
   );

@@ -9,7 +9,7 @@ const options = {
       description: 'API para gestión de exposiciones de arte',
     },
   },
-  apis: ['./routes/*.js'], // archivos que contienen las anotaciones
+  apis: ['./routes/*.js'],
 };
 
 const specs = swaggerJsdoc(options);

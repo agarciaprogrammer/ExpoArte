@@ -6,7 +6,7 @@ import type { Expense } from '../types';
 import { useState, useEffect } from 'react';
 import { getExpenses, createExpense, deleteExpense, updateExpense } from '../services/expenseService.ts';
 import { FaTrashAlt } from "react-icons/fa";
-
+import { getTodayDate } from '../utils/dateUtils';
 
 export default function Gastos() {
   const [showForm, setShowForm] = useState(false);
@@ -30,12 +30,19 @@ export default function Gastos() {
   }
 
   const handleAddExpense = () => {
+    setForm({
+      description: '',
+      amount: 0,
+      date: getTodayDate(),
+      organizer: '',
+    });
+    setEditingId(null);
     setShowForm(true);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-  const { name, value } = e.target;
-  setForm({ ...form, [name]: value });
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -70,6 +77,7 @@ export default function Gastos() {
     await deleteExpense(id);
     fetchExpenses();
   };
+
 
   return (
     <>

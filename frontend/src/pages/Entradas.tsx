@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { getPreSales, createPreSale, deletePreSale, updatePreSale } from '../services/presaleService.ts';
 import { getEntryPrices } from '../services/configService.ts';
 import { FaTrashAlt } from "react-icons/fa";
+import { getTodayDate } from '../utils/dateUtils';
 
 export default function Preventa() {
   const [showForm, setShowForm] = useState(false);
@@ -26,7 +27,7 @@ export default function Preventa() {
     quantity: 0,
     finalPrice: 0,
     paymentMethod: '', // valor por defecto
-    date: '',
+    date: getTodayDate(), // fecha por defecto
   });
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -160,7 +161,7 @@ export default function Preventa() {
         {ticketPrice === 0 ? (
         <p>Cargando precio de entrada...</p>
           ) : (
-            <button className={globalStyles.button} onClick={() => setShowForm(true)}>Agregar Preventa</button>
+            <button className={globalStyles.button} onClick={() => { setShowForm(true);  }}>Agregar Preventa</button>
           )}
 
         <br />
