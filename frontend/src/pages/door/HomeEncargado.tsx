@@ -1,4 +1,3 @@
-import React from 'react';
 import globalStyles from '../styles/Global.module.css';
 
 export default function DoorHome() {

@@ -10,6 +10,13 @@ import { FaTrashAlt } from "react-icons/fa";
 import { getTodayDate } from '../utils/dateUtils';
 
 export default function Preventa() {
+  type PreSaleForm = {
+    fullName: string;
+    quantity: number;
+    finalPrice: number;
+    paymentMethod: string;
+    date: string;
+  };
   const [showForm, setShowForm] = useState(false);
   const [preSales, setPreSales] = useState<PreSale[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -22,12 +29,12 @@ export default function Preventa() {
     toDate: ''
   });
   const [ticketPrice, setTicketPrice] = useState<number>(0);
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<PreSaleForm>({
     fullName: '',
-    quantity: 0,
+    quantity: 1,
     finalPrice: 0,
-    paymentMethod: '', // valor por defecto
-    date: getTodayDate(), // fecha por defecto
+    paymentMethod: '',
+    date: getTodayDate(),
   });
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -103,9 +110,20 @@ export default function Preventa() {
 
     try {
       if (editingId) {
-        await updatePreSale(editingId, form);
+        // Find the original preSale to get missing fields
+        const original = preSales.find(p => p.id === editingId);
+        if (!original) throw new Error('Preventa original no encontrada.');
+
+        await updatePreSale(editingId, {
+          ...form,
+          updatedAt: new Date().toISOString(),
+          checkedInCount: original.checkedInCount ?? 0
+        });
       } else {
-        await createPreSale(form);
+        await createPreSale({
+          ...form,
+          updatedAt: new Date().toISOString()
+        });
       }
 
       fetchPreSales();
