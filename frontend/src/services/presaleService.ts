@@ -1,39 +1,24 @@
-import axios from 'axios';
 import type { PreSale } from '../types';
-
-const API_URL = 'http://localhost:3001/api/presales';
+import api from './api';
 
 export async function getPreSales(): Promise<PreSale[]> {
-  const token = localStorage.getItem('token');
-  const response = await axios.get<PreSale[]>(API_URL, {
-    headers: {Authorization: `Bearer ${token}`},    
-  });
+  const response = await api.get<PreSale[]>('/presales');
   return response.data;
 }
 
 export async function createPreSale(data: Omit<PreSale, 'id'>): Promise<PreSale> {
-  const token = localStorage.getItem('token');
-  const response = await axios.post<PreSale>(API_URL, data, {
-    headers: {Authorization: `Bearer ${token}`},
-  });
+  const response = await api.post<PreSale>('/presales', data);
   return response.data;
 }
 
 export async function updatePreSale(
-    id: number,
-    data: Omit<PreSale, 'id'> & { checkedInCount: number }
-  ): Promise<PreSale> {
-    const token = localStorage.getItem('token');
-    const response = await axios.put<PreSale>(`${API_URL}/${id}`, data, {
-      headers: {Authorization: `Bearer ${token}`},
-    });
-    return response.data;
+  id: number,
+  data: Omit<PreSale, 'id'> & { checkedInCount: number }
+): Promise<PreSale> {
+  const response = await api.put<PreSale>(`/presales/${id}`, data);
+  return response.data;
 }
 
-
 export async function deletePreSale(id: number): Promise<void> {
-  const token = localStorage.getItem('token');
-  await axios.delete(`${API_URL}/${id}`, {
-    headers: {Authorization: `Bearer ${token}`},
-  });
+  await api.delete(`/presales/${id}`);
 }

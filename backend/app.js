@@ -31,8 +31,13 @@ app.use(errorHandler);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Default route
-app.get('/', (req, res) => {
-  res.send('ExpoArt API funcionando');
-});
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://expo-arte-phi.vercel.app'
+];
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
 
 module.exports = app;

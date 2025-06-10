@@ -16,6 +16,11 @@ async function startServer() {
 
     app.listen(PORT, () => {
       console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
+      
+      if (process.env.NODE_ENV === 'production') {
+        console.log(`Servidor en modo producción en el puerto ${PORT}`);
+      }
+
       if (process.env.NODE_ENV !== 'production') {
         console.log(`🔗 http://localhost:${PORT}`);
       }
