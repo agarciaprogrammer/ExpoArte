@@ -8,8 +8,14 @@ const sequelize = require('../config/db');
     const hashedPassword1 = await bcrypt.hash('adminexpo', 10);
     const hashedPassword2 = await bcrypt.hash('puertaexpo', 10);
 
-    await User.create({username: 'admin', password: hashedPassword1, role: 'admin'});
-    await User.create({username: 'puerta', password: hashedPassword2, role: 'door'});
+    await User.findOrCreate({
+        where: { username: 'admin' },
+        defaults: { password: hashedPassword1, role: 'admin' }
+    });
+    await User.findOrCreate({
+        where: { username: 'puerta' },
+        defaults: { password: hashedPassword2, role: 'door' }
+    });
 
     console.log('Usuarios creados exitosamente');
     await sequelize.close();
