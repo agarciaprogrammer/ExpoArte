@@ -71,3 +71,40 @@
   font-size: 0.875rem;
   margin-bottom: 1rem;
 }
+
+/* Mensaje de éxito */
+.successMessage {
+  background-color: #4CAF50;
+  color: white;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.successMessage p {
+  margin: 5px 0;
+}
+
+.successMessage p:first-child {
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Deshabilitar inputs durante carga */
+.input:disabled {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+
+.button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
