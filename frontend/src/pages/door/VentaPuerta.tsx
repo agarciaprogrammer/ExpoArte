@@ -151,10 +151,10 @@ export default function DoorSale() {
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
             <button type="submit">Guardar</button>
           </div>
-        </form>
+        </form> 
       </Modal>
 
-      <h2 className={styles.subtitle}>Entradas vendidas en puerta</h2>
+      <h3 className={styles.subtitle}>Entradas vendidas en puerta</h3>
       <Table
         headers={['Comprador', 'Cantidad', 'Método de Pago', 'Fecha', '']}
         rows={doorSales.map((d) => [
@@ -162,7 +162,7 @@ export default function DoorSale() {
           d.quantity,
           d.paymentMethod || '-',
           d.date,
-          <button className={styles.buttonDelete} onClick={(e) => {
+          <button className={styles.button} onClick={(e) => {
             e.stopPropagation();
             handleDelete(d.id);
           }}><FaTrashAlt size={15} /></button>
