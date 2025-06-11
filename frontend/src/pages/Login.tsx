@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import styles from './styles/Login.module.css';
+import { login } from '../services/authService';  // Importa la función login
 
 export default function Login() {
   const navigate = useNavigate();
@@ -12,8 +12,8 @@ export default function Login() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/auth/login', { username, password });
-      const { token, user } = response.data;
+      // Usamos la función login del servicio, que usa el axios con baseURL correcta
+      const { token, user } = await login(username, password);
 
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
