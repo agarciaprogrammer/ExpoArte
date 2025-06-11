@@ -12,7 +12,7 @@ export default function Login() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Usamos la función login del servicio, que usa el axios con baseURL correcta
+      // ERROR
       const { token, user } = await login(username, password);
 
       localStorage.setItem('token', token);

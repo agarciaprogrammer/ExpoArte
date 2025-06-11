@@ -11,7 +11,7 @@ async function startServer() {
     // Sincroniza modelos solo si no estamos en producción
     if (process.env.NODE_ENV === 'production') {
   // Ejecutar sync solo una vez, y luego comentar esta línea
-      await sequelize.sync();
+      //await sequelize.sync();
       console.log('🔄 Modelos sincronizados en producción');
     } else {
       await sequelize.sync();
