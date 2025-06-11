@@ -3,8 +3,8 @@ interface CheckInBarData {
   hour: string;
   people: number;
 }
-  const START_HOUR = 20; // 20:00 (8 PM)
-  const END_HOUR = 3;    // 03:00 (3 AM)
+  const START_HOUR = 18; // 20:00 (8 PM)
+  const END_HOUR = 1;    // 03:00 (3 AM)
 
 function generateHourLabels(startHour: number, endHour: number): string[] {
     const hours: string[] = [];
