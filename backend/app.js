@@ -35,9 +35,10 @@ const allowedOrigins = [
   'http://localhost:5173',
   'https://expo-arte-phi.vercel.app'
 ];
+
 app.use(cors({
   origin: allowedOrigins,
-  credentials: true
+  credentials: true, // si usás cookies o auth con token
 }));
 
 module.exports = app;
