@@ -18,7 +18,17 @@ const swaggerSpec = require('./config/swagger');
 const app = express();
 app.set('trust proxy', 1);
 
-app.use(cors());
+// Default route
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://expo-arte-phi.vercel.app'
+];
+//dale
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true, // si usás cookies o auth con token
+}));
+
 app.use(express.json());
 
 // Routes (app.use)
@@ -31,15 +41,5 @@ app.use('/api/config', settingRotes);
 app.use(errorHandler);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Default route
-const allowedOrigins = [
-  'http://localhost:5173',
-  'https://expo-arte-phi.vercel.app'
-];
-//dale
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true, // si usás cookies o auth con token
-}));
 
 module.exports = app;
