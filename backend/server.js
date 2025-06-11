@@ -9,10 +9,15 @@ async function startServer() {
     console.log('✅ Conexión a PostgreSQL exitosa');
 
     // Sincroniza modelos solo si no estamos en producción
-    if (process.env.NODE_ENV !== 'production') {
-      await sequelize.sync(); // { force: true } para resetear DB
-      console.log('🔄 Modelos sincronizados');
+    if (process.env.NODE_ENV === 'production') {
+  // Ejecutar sync solo una vez, y luego comentar esta línea
+      await sequelize.sync();
+      console.log('🔄 Modelos sincronizados en producción');
+    } else {
+      await sequelize.sync();
+      console.log('🔄 Modelos sincronizados en desarrollo');
     }
+
 
     app.listen(PORT, () => {
       console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
