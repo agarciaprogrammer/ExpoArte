@@ -17,10 +17,10 @@ export default function DoorSale() {
 
   const [form, setForm] = useState({
     fullName: '',
-    quantity: 0,
+    quantity: '1',
     paymentMethod: '',
   });
-
+  const [error, setError] = useState<string>('');
 
   const fetchDoorSales = async () => {
     try {
@@ -53,16 +53,28 @@ export default function DoorSale() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setForm({ ...form, [name]: name === 'quantity' ? Number(value) : value });
+    if (name === 'quantity') {
+      if (/^\d*$/.test(value)) {
+        setForm({ ...form, quantity: value });
+      }
+    } else {
+      setForm({ ...form, [name]: value });
+    }
+    setError('');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!form.quantity || Number(form.quantity) < 1) {
+      setError('La cantidad debe ser mayor a 0');
+      return;
+    }
+
     const newSale: Omit<DoorSale, 'id'> = {
       fullName: form.fullName,
-      quantity: form.quantity,
-      finalPrice: form.quantity * doorPrice,
+      quantity: Number(form.quantity),
+      finalPrice: Number(form.quantity) * doorPrice,
       paymentMethod: form.paymentMethod,
       date: new Date().toISOString(),
     };
@@ -77,7 +89,7 @@ export default function DoorSale() {
       }
 
       fetchDoorSales();
-      setForm({ fullName: '', quantity: 1, paymentMethod: '' });
+      setForm({ fullName: '', quantity: '1', paymentMethod: '' });
       setEditingId(null);
       setShowModal(false);
       setTimeout(() => setSuccessMessage(''), 3000);
@@ -89,11 +101,12 @@ export default function DoorSale() {
   const handleRowClick = (sale: DoorSale) => {
     setForm({
       fullName: sale.fullName,
-      quantity: sale.quantity,
+      quantity: String(sale.quantity),
       paymentMethod: sale.paymentMethod,
     });
     setEditingId(sale.id);
     setShowModal(true);
+    setError('');
   };
 
   const handleDelete = async (id: number) => {
@@ -114,7 +127,7 @@ export default function DoorSale() {
       <p className={styles.subtitle}>Registro de entradas vendidas en el momento del evento.</p>
 
       <button className={styles.button} onClick={() => {
-        setForm({ fullName: '', quantity: 1, paymentMethod: '' });
+        setForm({ fullName: '', quantity: '1', paymentMethod: '' });
         setEditingId(null);
         setShowModal(true);
       }}>Agregar entrada</button>
@@ -139,6 +152,7 @@ export default function DoorSale() {
             onChange={handleChange}
             required
           />
+          {error && <p style={{color: 'red', margin: 0}}>{error}</p>}
           <FormField
             label="Método de pago"
             name="paymentMethod"

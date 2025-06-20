@@ -87,19 +87,19 @@ export default function Dashboard() {
   ];
 
   const cardsIngresos = [
-    { title: 'Ingresos Preventa', value: formatCurrency(totalPreventa), cardClass: '', valueClass: '' },
-    { title: 'Ingresos Puerta', value: formatCurrency(totalPuerta), cardClass: '', valueClass: '' },
-    { title: 'Entradas en Efectivo', value: formatCurrency(totalEfectivo), cardClass: '', valueClass: '' },
-    { title: 'Entradas Preventa', value: totalEntradasPreventa, cardClass: '', valueClass: '' },
-    { title: 'Entradas Puerta', value: totalEntradasPuerta, cardClass: '', valueClass: '' },
-    { title: 'Entradas en MercadoPago', value: formatCurrency(totalMercadoPago), cardClass: '', valueClass: '' },
+    { title: 'Ingresos - Preventa', value: formatCurrency(totalPreventa), cardClass: '', valueClass: '' },
+    { title: 'Ingresos - Puerta', value: formatCurrency(totalPuerta), cardClass: '', valueClass: '' },
+    { title: 'Ingresos - Efectivo', value: formatCurrency(totalEfectivo), cardClass: '', valueClass: '' },
+    { title: 'Ingresos - Preventa', value: totalEntradasPreventa, cardClass: '', valueClass: '' },
+    { title: 'Ingresos - Puerta', value: totalEntradasPuerta, cardClass: '', valueClass: '' },
+    { title: 'Ingresos - MercadoPago', value: formatCurrency(totalMercadoPago), cardClass: '', valueClass: '' },
   ];
 
   const cardsTotales = [
-    { title: 'Gastos Totales', value: formatCurrency(totalGastos), cardClass: '', valueClass: '' },
-    { title: 'Ingresos Totales', value: formatCurrency(totalIngresos), cardClass: '', valueClass: '' },
+    { title: 'Total Gastos', value: formatCurrency(totalGastos), cardClass: '', valueClass: '' },
+    { title: 'Total Ingresos', value: formatCurrency(totalIngresos), cardClass: '', valueClass: '' },
     {
-      title: 'Ganancia Total',
+      title: 'Total Ganancia',
       value: formatCurrency(ganancia),
       cardClass: '',
       valueClass: ganancia >= 0 ? styles.positiveText : styles.negativeText,
@@ -107,8 +107,8 @@ export default function Dashboard() {
   ];
 
   const cardsGananciasRepartidas = [
-    { title: 'Ganancias - Iara', value: formatCurrency(gananciaIara), cardClass: styles.iaraCard, valueClass: '' },
-    { title: 'Ganancias - Kate', value: formatCurrency(gananciaKate), cardClass: styles.kateCard, valueClass: '' },
+    { title: 'Ganancia - Iara', value: formatCurrency(gananciaIara), cardClass: styles.iaraCard, valueClass: '' },
+    { title: 'Ganancia - Kate', value: formatCurrency(gananciaKate), cardClass: styles.kateCard, valueClass: '' },
   ];
 
   // Datos para gráficos
@@ -184,7 +184,7 @@ export default function Dashboard() {
       </section>
 
       <section className={styles.dashboardSection}>
-        <h2 className={styles.sectionTitle}>Totales</h2>
+        <h2 className={styles.sectionTitle}>Total</h2>
         <div className={styles.cardsContainer}>
           {cardsTotales.map((item, index) => (
             <div className={`${styles.card} ${item.cardClass}`} 

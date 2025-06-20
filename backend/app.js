@@ -21,6 +21,7 @@ app.set('trust proxy', 1);
 // Allowed origins para CORS
 const allowedOrigins = [
   'http://localhost:5173',
+  'http://localhost:5174',
   'https://expo-arte-phi.vercel.app'
 ];
 

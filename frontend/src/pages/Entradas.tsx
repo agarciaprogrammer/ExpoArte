@@ -12,7 +12,7 @@ import { getTodayDate } from '../utils/dateUtils';
 export default function Preventa() {
   type PreSaleForm = {
     fullName: string;
-    quantity: number;
+    quantity: string;
     finalPrice: number;
     paymentMethod: string;
     date: string;
@@ -31,12 +31,13 @@ export default function Preventa() {
   const [ticketPrice, setTicketPrice] = useState<number>(0);
   const [form, setForm] = useState<PreSaleForm>({
     fullName: '',
-    quantity: 1,
+    quantity: '1',
     finalPrice: 0,
     paymentMethod: '',
     date: getTodayDate(),
   });
   const [searchTerm, setSearchTerm] = useState('');
+  const [error, setError] = useState<string>('');
 
 
   useEffect(() => {
@@ -94,38 +95,44 @@ export default function Preventa() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     if (name === 'quantity') {
-      const quantity = parseInt(value) || 1;
-      setForm((prev) => ({
-        ...prev,
-        quantity,
-        finalPrice: quantity * ticketPrice
-      }));
+      if (/^\d*$/.test(value)) {
+        setForm((prev) => ({
+          ...prev,
+          quantity: value,
+          finalPrice: value && Number(value) > 0 ? Number(value) * ticketPrice : 0
+        }));
+      }
     } else {
       setForm({ ...form, [name]: value });
     }
+    setError('');
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    if (!form.quantity || Number(form.quantity) < 1) {
+      setError('La cantidad debe ser mayor a 0');
+      return;
+    }
     try {
       if (editingId) {
-        // Find the original preSale to get missing fields
         const original = preSales.find(p => p.id === editingId);
         if (!original) throw new Error('Preventa original no encontrada.');
-
         await updatePreSale(editingId, {
           ...form,
+          quantity: Number(form.quantity),
+          finalPrice: Number(form.quantity) * ticketPrice,
           updatedAt: new Date().toISOString(),
           checkedInCount: original.checkedInCount ?? 0
         });
       } else {
         await createPreSale({
           ...form,
+          quantity: Number(form.quantity),
+          finalPrice: Number(form.quantity) * ticketPrice,
           updatedAt: new Date().toISOString()
         });
       }
-
       fetchPreSales();
       setShowForm(false);
       setEditingId(null);
@@ -140,23 +147,25 @@ export default function Preventa() {
   const resetForm = () => {
     setForm({
       fullName: '',
-      quantity: 1,
+      quantity: '1',
       finalPrice: 1 * ticketPrice,
       paymentMethod: '',
       date: '',
     });
+    setError('');
   };
 
   const handleRowClick = (preSale: PreSale) => {
     setForm({
       fullName: preSale.fullName,
-      quantity: preSale.quantity,
+      quantity: String(preSale.quantity),
       finalPrice: preSale.finalPrice,
       paymentMethod: preSale.paymentMethod,
       date: preSale.date
     });
     setEditingId(preSale.id);
     setShowForm(true);
+    setError('');
   };
 
   const handleDelete = async (id: number) => {
@@ -219,6 +228,7 @@ export default function Preventa() {
         <form onSubmit={handleSubmit}>
           <FormField label="Comprador" name="fullName" type="text" value={form.fullName} onChange={handleChange} />
           <FormField label="Cantidad" name="quantity" type="number" value={form.quantity} onChange={handleChange} />
+          {error && <p style={{color: 'red', margin: 0}}>{error}</p>}
           <FormField label="Fecha" name="date" type="date" value={form.date} onChange={handleChange} />
           
           <FormField
