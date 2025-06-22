@@ -4,16 +4,23 @@ require('dotenv').config();
 let sequelize;
 
 if (process.env.DATABASE_URL) {
-  // Producción (Render)
+  // Producción (Supabase)
   sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: 'postgres',
     protocol: 'postgres',
-    logging: true,
+    logging: false, // Cambiado a false para evitar warnings
     dialectOptions: {
       ssl: {
         require: true,
         rejectUnauthorized: false,
       },
+      // Configuración específica para Supabase
+      pool: {
+        max: 10,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
+      }
     },
   });
 } else {
@@ -26,7 +33,7 @@ if (process.env.DATABASE_URL) {
       host: process.env.DB_HOST,
       port: process.env.DB_PORT,
       dialect: 'postgres',
-      logging: true,
+      logging: console.log, // Para desarrollo
     }
   );
 }
