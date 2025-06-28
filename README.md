@@ -64,7 +64,6 @@ Este proyecto es una aplicación web Full Stack pensada para ayudar a organizar 
 - Como **encargado**, quiero registrar ventas en puerta (nombre, cantidad, método).
 - Como **encargado**, quiero registrar si ya entraron al evento.
 - Como **encargado**, no debo ver totales ni números del sistema.
-
 ---
 
 ## 📄 Pantallas y Funcionalidades
