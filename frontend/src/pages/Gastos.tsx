@@ -78,6 +78,8 @@ export default function Gastos() {
     fetchExpenses();
   };
 
+  const formatCurrency = (value: number) =>
+    new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(value);
 
   return (
     <>
@@ -91,7 +93,7 @@ export default function Gastos() {
           rows={expenses.map(exp => [
             exp.description,
             exp.organizer,
-            `$${Number(exp.amount).toFixed(2)}`,
+            `${formatCurrency(exp.amount)}`,
             exp.date,
             <button className={globalStyles.buttonDelete} onClick={(e) => {
               e.stopPropagation();

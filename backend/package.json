@@ -6,8 +6,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "seed-users": "node scripts/seedUsers.js",
+    "seed-supabase-users": "node scripts/seedSupabaseUsers.js",
     "migrate-supabase": "node scripts/migrateToSupabase.js",
-    "check-tables": "node scripts/checkSupabaseTables.js"
+    "check-tables": "node scripts/checkSupabaseTables.js",
+    "check-render-data": "node scripts/checkRenderData.js"
   },
   "keywords": [],
   "author": "",
