@@ -18,6 +18,7 @@ export default function Gastos() {
     date: '',
     organizer: '',
   });
+  const [sortAsc, setSortAsc] = useState(true);
 
   useEffect(() => {
     fetchExpenses();
@@ -78,6 +79,16 @@ export default function Gastos() {
     fetchExpenses();
   };
 
+  const handleSortByOrganizer = () => {
+    const sorted = [...expenses].sort((a, b) => {
+      return sortAsc
+        ? a.organizer.localeCompare(b.organizer)
+        : b.organizer.localeCompare(a.organizer);
+    });
+    setExpenses(sorted);
+    setSortAsc(!sortAsc);
+  };
+
   const formatCurrency = (value: number) =>
     new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(value);
 
@@ -101,6 +112,9 @@ export default function Gastos() {
             }}><FaTrashAlt size={15} /></button>
           ])}
           onRowClick={(index) => handleRowClick(expenses[index])}
+          onSort={(index) => {
+            if (index === 1) handleSortByOrganizer();
+          }}
         />
       </div>
 
