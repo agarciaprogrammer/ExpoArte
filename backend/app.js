@@ -51,4 +51,9 @@ app.use('/api/config', settingRoutes);
 app.use(errorHandler);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+// Default route
+app.get('/', (req, res) => {
+  res.send('ExpoArt API funcionando');
+});
+
 module.exports = app;
