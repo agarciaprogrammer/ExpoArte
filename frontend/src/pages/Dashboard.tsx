@@ -70,13 +70,23 @@ export default function Dashboard() {
   const totalIngresos = totalEfectivo + totalMercadoPago;
   const ganancia = (totalPreventa + totalPuerta) - totalGastos;
 
-  // Ganancias repartidas
+  // Nueva lógica de reparto proporcional basada en gastos
   const gastoIara = totalGastosOrganizadora('Iara');
   const gastoKate = totalGastosOrganizadora('Kate');
-  const gananciaRestante = (ganancia * 0.95) - gastoIara - gastoKate;
-  const mitadRestante = gananciaRestante / 2;
-  const gananciaIara = gastoIara + mitadRestante;
-  const gananciaKate = gastoKate + mitadRestante;
+  const totalGastosOrganizadoras = gastoIara + gastoKate;
+  const totalIngresosReales = totalPreventa + totalPuerta;
+  
+  // Calcular proporciones
+  const propIara = totalGastosOrganizadoras > 0 ? gastoIara / totalGastosOrganizadoras : 0;
+  const propKate = totalGastosOrganizadoras > 0 ? gastoKate / totalGastosOrganizadoras : 0;
+  
+  // Repartir ingresos proporcionalmente
+  const recibeIara = totalIngresosReales * propIara;
+  const recibeKate = totalIngresosReales * propKate;
+  
+  // Calcular saldos
+  const saldoIara = recibeIara - gastoIara;
+  const saldoKate = recibeKate - gastoKate;
 
   const dataByHour = processCheckInsByHour(preventas);
 
@@ -99,7 +109,7 @@ export default function Dashboard() {
     { title: 'Total Gastos', value: formatCurrency(totalGastos), cardClass: '', valueClass: '' },
     { title: 'Total Ingresos', value: formatCurrency(totalIngresos), cardClass: '', valueClass: '' },
     {
-      title: 'Total Ganancia',
+      title: 'Total Resultado',
       value: formatCurrency(ganancia),
       cardClass: '',
       valueClass: ganancia >= 0 ? styles.positiveText : styles.negativeText,
@@ -107,8 +117,13 @@ export default function Dashboard() {
   ];
 
   const cardsGananciasRepartidas = [
-    { title: 'Ganancia - Iara', value: formatCurrency(gananciaIara), cardClass: styles.iaraCard, valueClass: '' },
-    { title: 'Ganancia - Kate', value: formatCurrency(gananciaKate), cardClass: styles.kateCard, valueClass: '' },
+    { title: 'Reparto - Iara', value: formatCurrency(recibeIara), cardClass: styles.iaraCard, valueClass: '' },
+    { title: 'Reparto - Kate', value: formatCurrency(recibeKate), cardClass: styles.kateCard, valueClass: '' },
+  ];
+
+  const cardsSaldos = [
+    { title: 'Saldo - Iara', value: formatCurrency(saldoIara), cardClass: styles.iaraCard, valueClass: saldoIara >= 0 ? styles.positiveText : styles.negativeText },
+    { title: 'Saldo - Kate', value: formatCurrency(saldoKate), cardClass: styles.kateCard, valueClass: saldoKate >= 0 ? styles.positiveText : styles.negativeText },
   ];
 
   // Datos para gráficos
@@ -198,9 +213,23 @@ export default function Dashboard() {
       </section>
 
       <section className={styles.dashboardSection}>
-        <h2 className={styles.sectionTitle}>Ganancias repartidas</h2>
+        <h2 className={styles.sectionTitle}>Reparto de Ingresos</h2>
         <div className={styles.cardsContainer}>
           {cardsGananciasRepartidas.map((item, index) => (
+            <div className={`${styles.card} ${item.cardClass}`} 
+                 style={{ '--i': index } as React.CSSProperties} 
+                 key={index}>
+              <div className={styles.cardTitle}>{item.title}</div>
+              <div className={`${styles.cardValue} ${item.valueClass}`}>{item.value}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.dashboardSection}>
+        <h2 className={styles.sectionTitle}>Saldos de Resultado</h2>
+        <div className={styles.cardsContainer}>
+          {cardsSaldos.map((item, index) => (
             <div className={`${styles.card} ${item.cardClass}`} 
                  style={{ '--i': index } as React.CSSProperties} 
                  key={index}>
