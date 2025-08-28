@@ -99,7 +99,7 @@ export default function Preventa() {
         setForm((prev) => ({
           ...prev,
           quantity: value,
-          finalPrice: value && Number(value) > 0 ? Number(value) * ticketPrice : 0
+          finalPrice: Number(value) * ticketPrice
         }));
       }
     } else {
@@ -110,8 +110,8 @@ export default function Preventa() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!form.quantity || Number(form.quantity) < 1) {
-      setError('La cantidad debe ser mayor a 0');
+    if (!form.quantity || Number(form.quantity) < 0) {
+      setError('La cantidad debe ser mayor o igual a 0');
       return;
     }
     try {
@@ -150,7 +150,7 @@ export default function Preventa() {
       quantity: '1',
       finalPrice: 1 * ticketPrice,
       paymentMethod: '',
-      date: '',
+      date: getTodayDate(),
     });
     setError('');
   };
@@ -227,7 +227,7 @@ export default function Preventa() {
       <Modal isOpen={showForm} onClose={() => setShowForm(false)} title="Agregar Preventa">
         <form onSubmit={handleSubmit}>
           <FormField label="Comprador" name="fullName" type="text" value={form.fullName} onChange={handleChange} />
-          <FormField label="Cantidad" name="quantity" type="number" value={form.quantity} onChange={handleChange} />
+          <FormField label="Cantidad" name="quantity" type="text" value={form.quantity} onChange={handleChange} />
           {error && <p style={{color: 'red', margin: 0}}>{error}</p>}
           <FormField label="Fecha" name="date" type="date" value={form.date} onChange={handleChange} />
           
